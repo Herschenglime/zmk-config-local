@@ -24,6 +24,8 @@
 
         zephyrDepsHash = "sha256-1exuW3JDYKhL5NW2MIgSYUcixaEkdxSfnMQYOTIbh84=";
 
+        enableZmkStudio = true;
+
         meta = {
           description = "ZMK firmware";
           license = nixpkgs.lib.licenses.mit;
