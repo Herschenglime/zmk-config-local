@@ -9,11 +9,15 @@
 #include <dt-bindings/zmk/bt.h>
 
 #define DEFAULT 0
-#define NUMBER 1
-#define MOVEMENT 2
-#define MEDIA 3
-#define GAMING 4
+#define GAMING 1
+#define NAV 2
+#define SYM 3
+#define NUM 4
+#define BLUETOOTH 5
 
+// homerow mods macro
+#define HRML &sk LALT  &sk LGUI  &sk LSFT &sk LCTL
+#define HRMR &sk RCTL  &sk RSFT  &sk RGUI &sk LALT
 
 /* Ex command to convert kp to autoshifted key
  *
@@ -28,6 +32,8 @@
 //give myself a bunch of time to stack modifiers
 &sk {
      release-after-ms = <2000>;
+     lazy;
+     quick-release;
 };
 
 //allow for adding modifiers to keys on sticky num layer
@@ -102,7 +108,7 @@ continue-list = <UNDERSCORE BSPC MINUS>;
 
         tph: tap-preferred-hold {
             compatible = "zmk,behavior-hold-tap";
-            label = "sticky_mod_tap";
+            label = "tap preferred hold";
             #binding-cells = <2>;
             flavor = "tap-preferred";
             tapping-term-ms = <200>;
@@ -124,6 +130,8 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             timeout-ms = <30>;
             key-positions = <11 12>;
             bindings = <&kp BSPC>;
+            // disable on
+            layers = <DEFAULT GAMING SYM NUM BLUETOOTH>;
         };
 
          combo_backslash {
@@ -168,12 +176,6 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             bindings = <&kp DOUBLE_QUOTES>;
         };
 
-          combo_numlayer {
-            timeout-ms = <50>;
-            key-positions = <30 33>;
-            bindings = <&sl 1>;
-        };
-
           combo_reset {
             timeout-ms = <50>;
             key-positions = <1 2 7 8>;
@@ -191,13 +193,6 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             key-positions = <31 32>;
             bindings = <&caps_word>;
         };
-
-          combo_num_layer_toggle {
-            timeout-ms = <15>;
-            key-positions = <10 13>;
-            bindings = <&mo_tog 1 1>;
-        };
-
 
         opening_brace {
             timeout-ms = <15>;
@@ -283,7 +278,20 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             bindings = <&my_macro>;
         };
 
-};
+        bluetooth_layer {
+            timeout-ms = <50>;
+            key-positions = <0 10 20>;
+            bindings = <&tog BLUETOOTH>;
+        };
+    };
+
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        tri_layer {
+            if-layers = <NAV SYM>;
+            then-layer = <NUM>;
+        };
+    };
 
 keymap {
 compatible = "zmk,keymap";
@@ -294,122 +302,89 @@ compatible = "zmk,keymap";
                            │     │            bootloader             │     │
                            │     │     ┌─────┬─────┴─────┬─────┐     │     │
                   |  q  |  w  |  f  |  p  |  b  |     |  j  |  l  |  u  |  y  |  ;  |
-                  |    DEL    |     |     |     |     |     |     |     |     \     |
+                  |     |    DEL    |     |     |     |     |     |     |     \     |
 
                   |  a  |  r  |  s  |  t  |  g  |     |  m  |  n  |  e  |  i  |  o  |
-                  | lt2 |     |     |     |     |     |     |     |     |     | lt3 |
                   |     |     |     |     |     |     |     |     |     |     '     |
-                  |    BSP    |     |     -     |     |     =     |     |    MOD    |
+                  |     |    BSP    |     -     |     |     =     |     |     |     |
 
                   |  z  |  x  |  c  |  d  |  v  |     |  k  |  h  |  ,  |  .  |  /  |
-                  |     |     |    sl1    |     |     |     |     |     |     |     |
                   |     |     |     |     _     |     |     +     |     |     |     |
 
-                                    | SPC | ESC |     | TAB | ENT |
-                                    | SFT | CTL |     | ALT | MOD |
-                                       │     └─────┬─────┘     │
-                                       │       caps_word       │
-                                       │                       │
-                                       └───────────┬───────────┘
-                                                 ltog1
+                                    | nav | spc |     | ent | sym |
+                                    |     | sft |     | mod |     |
+                                             └─────┬─────┘
+                                               caps_word
+
 */
 
                 default_layer {
         bindings = <
-        AS(Q) AS(W) AS(F) AS(P) AS(B)                       AS(J) AS(L)  AS(U)    AS(Y)   AS(SEMI)
-        &lt 2 A AS(R) AS(S) AS(T) AS(G)                                 AS(M) AS(N) AS(E) AS(I) &lt 3 O
+        AS(Q) AS(W) AS(F) AS(P) AS(B)                      AS(J) AS(L)  AS(U)    AS(Y)   AS(SEMI)
+        AS(A) AS(R) AS(S) AS(T) AS(G)                      AS(M) AS(N) AS(E) AS(I) AS(O)
         AS(Z) AS(X) AS(C) AS(D) AS(V)                      AS(K) AS(H)  AS(CMMA) AS(DOT)  AS(FSLH)
-                        &tph LSFT SPC &mt LCTL ESC                   &mt LALT TAB &mt LGUI RET
+                &mo NAV &tph LSFT SPC                      &tph LGUI RET &mo SYM
         >;
         };
 
-/*
-                this has changed! no longer a reference
-                |  !  |  @  |  {  |  }  |  &  |     | INS |  7  |  8  |  9  |  *  |
-                |    DEL    |     |     |     |     |     |     |     |     \     |
-
-                |  #  |  $  |  (  |  )  |  *  |     |  .  |  4  |  5  |  6  |  0  |
-                | lt2 |     |     |     |     |     |     |     |     |     | lt3 |
-                |    BSP    |     |     -     |     |     =     |     |    MOD    |
-
-                |  %  |  ^  |  [  |  ]  |  `  |     |SYSRQ|  1  |  2  |  3  |  /  |
-                |     |     |     |     _     |     |     +     |     |     |     |
-
-                                  | ( ) | ( ) |     | ( ) | ( ) |
-*/
-
-                number_layer {
+                gaming_layer {
         bindings = <
-        &kp EXCL &kp AT &kp HASH &kp DLLR &kp INS                          &kp PLUS &kp N7  &kp N8    &kp N9   &kp ASTRK
-        &lt 2 PRCNT &kp CARET &kp AMPS &kp ASTRK &kp PSCRN                   &kp DOT &kp N4 &kp N5 &kp N6 &lt 3 N0
-        &kp GRAVE &kp TILDE &kp BSLH &kp PIPE &kp CMMA                      &kp MINUS &kp N1  &kp N2 &kp N3 &kp SLASH
-                        &trans &trans               &trans &trans
+    &kp TAB  &kp Q  &kp W  &kp E  &kp R      &kp Y  &kp U  &kp I  &kp O  &kp P
+
+    &kp LSFT  &kp A  &kp S  &kp D  &kp F      &kp H  &kp J  &kp K  &kp L  &kp SQT
+
+    &kp LCTL  &kp Z  &kp X  &kp C  &kp V      &kp N  &kp M  &kp COMMA  &kp DOT    &kp FSLH
+
+                 &kp SPC  &kp ESC      &kp ESC    &kp SPACE
         >;
         };
 
-/*
-                | ( ) | ( ) | HOM | END | ( ) |     | ( ) | A-↓ |Docs-|Docs+| A-↑ |
 
-                | ( ) | TAB | C-← | C-→ | ( ) |     | ( ) |  ←  |  ↓  |  ↑  |  →  |
-
-                | ( ) |S-TAB| PGD | PGU | ( ) |     | ( ) | A-← |Zoom-|Zoom+| A-→ |
-
-                                  | ( ) | ( ) |     | ( ) | ( ) |
-*/
-
-                movement_layer {
+                nav_layer {
         bindings = <
-            &trans &trans &kp HOME &kp END &trans                 &trans &kp LA(DOWN) &kp LC(LA(MINUS)) &kp LC(LA(EQUAL)) &kp LA(UP)
-    &trans &kp TAB &kp LC(LEFT) &kp LC(RIGHT) &trans      &trans &kp LEFT &kp DOWN &kp UP &kp RIGHT
-    &trans &kp LS(TAB) &kp PG_DN &kp PG_UP &trans      &trans &kp LG(LA(LEFT)) &kp LC(MINUS) &kp LC(EQUAL) &kp LG(LA(RIGHT))
-                         &trans &trans      &trans &trans
+   &trans  &trans  &trans  &trans  &trans                 &trans  &kp HOME  &kp PG_DN  &kp PG_UP  &kp END
+
+            HRML                  &trans                  &trans  &kp LEFT &kp DOWN &kp UP &kp RIGHT
+
+    &kp C_PP  &kp C_VOL_DN &kp C_VOL_UP &kp ESC &trans    &trans  &kp TAB  &kp LC(MINUS)  &kp LC(EQUAL) &trans
+
+                                        &trans  &trans    &trans  &trans
         >;
         };
 
-/*
-                | Fn1 | Fn2 | Fn3 | Fn4 |     |        |     |BT-P | BT-N | BT-C|    |
 
-                | Fn5 | Fn6 | Fn7 | Fn8 |     |        |     | Vol-| Vol+|  ⏯  | ( ) |
+                sym_layer {
+        bindings = <
+    &trans  &trans  &trans  &trans  &trans                   &trans  &trans  &trans  &trans  &trans
 
-                | Fn9 | F10 | F11 | F12 |     |        |     |  ⏮ |  ⏭  |     |     |
+    &kp SLASH  &kp ASTRK  &kp MINUS  &kp PLUS  &trans        &trans  HRMR
 
-                                  |     |     |        |     |     |
-*/
+    &trans  &trans  &trans  &kp ESC  &trans                  &trans  &kp TAB  &trans  &trans  &trans
 
-                media_layer {
+                             &trans  &trans                  &trans  &trans
+        >;
+        };
+
+                num_layer {
         bindings = <
     &kp F1 &kp F2 &kp F3 &kp F4    &bt BT_SEL 0         &bt BT_SEL 3 &bt BT_PRV &bt BT_NXT &bt BT_CLR &trans
     &kp F5 &kp F6 &kp F7 &kp F8    &bt BT_SEL 1         &bt BT_SEL 4 &kp C_VOL_DN &kp C_VOL_UP &kp C_PP &trans
-    &kp F9 &kp F10 &kp F11 &kp F12 &bt BT_SEL 2      &trans &kp C_PREV &kp C_NEXT &trans &trans
-                         &trans &trans         &trans &trans
+    &kp F9 &kp F10 &kp F11 &kp F12 &bt BT_SEL 2         &trans &kp C_PREV &kp C_NEXT &trans &trans
+                         &trans &trans                  &trans &trans
         >;
         };
 
-/*
-                |     |     |     |     |     |        |     |     |     |     |     |
-
-                |     |     |     |     |     |        |     |     |     |     |     |
-
-                |     |     |     |     |     |        |     |     |     |     |     |
-
-                                  |     |     |        |     |     |
-*/
-
-
-                //right half can  be figured out later
-                gaming_layer {
+                bluetooth_layer {
         bindings = <
-            &kp TAB      &kp Q      &kp W      &kp E      &kp R          &kp Y      &kp U      &kp I      &kp O      &kp P
-
-            &kp LSFT     &kp A      &kp S      &kp D      &kp F          &kp H      &kp J      &kp K      &kp L      &kp SQT
-
-            &kp LCTL      &kp Z      &kp X      &kp C      &kp V          &kp N      &kp M      &kp COMMA  &kp DOT    &kp FSLH
-
-                                             &kp SPC  &kp ESC          &kp ESC    &kp SPACE
+    &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans
+    &trans &trans &trans &trans &trans      &trans &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3
+    &trans &trans &trans &trans &trans      &trans &bt BT_SEL 4 &bt BT_CLR &studio_unlock &trans
+                         &trans &trans      &trans &trans
         >;
         };
-
-    };
+};
+  };
+/*
 };
 
 // empty layers for easy creation later

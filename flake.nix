@@ -26,6 +26,7 @@
 
         enableZmkStudio = true;
 
+        extraCmakeFlags= ["-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"];
         meta = {
           description = "ZMK firmware";
           license = nixpkgs.lib.licenses.mit;
