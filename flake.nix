@@ -22,7 +22,7 @@
         board = "nice_nano_v2";
         shield = "cradio_%PART%";
 
-        zephyrDepsHash = "sha256-1exuW3JDYKhL5NW2MIgSYUcixaEkdxSfnMQYOTIbh84=";
+        zephyrDepsHash = "";
 
         enableZmkStudio = true;
 
