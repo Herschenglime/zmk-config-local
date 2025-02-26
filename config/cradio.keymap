@@ -15,6 +15,10 @@
 #define NUM 4
 #define BLUETOOTH 5
 
+// define sets of layers such that certain combos can be excluded from callum mod layers
+#define LEFT_EXCLUSION layers = <DEFAULT GAMING SYM NUM BLUETOOTH>;
+#define RIGHT_EXCLUSION layers = <DEFAULT GAMING NAV NUM BLUETOOTH>;
+
 // homerow mods macro
 #define HRML &sk LALT  &sk LGUI  &sk LSFT &sk LCTL
 #define HRMR &sk RCTL  &sk RSFT  &sk RGUI &sk LALT
@@ -37,9 +41,10 @@
 };
 
 //allow for adding modifiers to keys on sticky num layer
-&sl {
-    /delete-property/ quick-release;
-};
+// undo to allow summoning mods from sticky layers
+// &sl {
+//     /delete-property/ quick-release;
+// };
 
 &caps_word {
 continue-list = <UNDERSCORE BSPC MINUS>;
@@ -130,8 +135,7 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             timeout-ms = <30>;
             key-positions = <11 12>;
             bindings = <&kp BSPC>;
-            // disable on
-            layers = <DEFAULT GAMING SYM NUM BLUETOOTH>;
+            LEFT_EXCLUSION
         };
 
          combo_backslash {
@@ -168,6 +172,7 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             timeout-ms = <50>;
             key-positions = <17 18>;
             bindings = <&mt LGUI SQT>;
+            RIGHT_EXCLUSION
         };
 
           combo_double_quote {
@@ -210,12 +215,14 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             timeout-ms = <15>;
             key-positions = <12 13>;
             bindings = <&kp LPAR>;
+            LEFT_EXCLUSION
         };
 
         closing_par {
             timeout-ms = <15>;
             key-positions = <16 17>;
             bindings = <&kp RPAR>;
+            RIGHT_EXCLUSION
         };
 
         opening_bracket {
@@ -344,9 +351,9 @@ compatible = "zmk,keymap";
         bindings = <
    &trans  &trans  &trans  &trans  &trans                 &trans  &kp HOME  &kp PG_DN  &kp PG_UP  &kp END
 
-            HRML                  &trans                  &trans  &kp LEFT &kp DOWN &kp UP &kp RIGHT
+            HRML                   &trans                 &trans  &kp LEFT &kp DOWN &kp UP &kp RIGHT
 
-    &kp C_PP  &kp C_VOL_DN &kp C_VOL_UP &kp ESC &trans    &trans  &kp TAB  &kp LC(MINUS)  &kp LC(EQUAL) &trans
+   &kp LC(Z) &kp  LC(X)  &kp LC(C)  &kp ESC  &kp LC(V)    &trans  &kp TAB  &kp LC(MINUS)  &kp LC(EQUAL) &trans
 
                                         &trans  &trans    &trans  &trans
         >;
@@ -355,11 +362,11 @@ compatible = "zmk,keymap";
 
                 sym_layer {
         bindings = <
-    &trans  &trans  &trans  &trans  &trans                   &trans  &trans  &trans  &trans  &trans
+    &kp EXCL  &kp AT  &kp HASH  &kp DLLR  &kp PCNT           &trans  &trans  &trans  &trans  &trans
 
     &kp SLASH  &kp ASTRK  &kp MINUS  &kp PLUS  &trans        &trans  HRMR
 
-    &trans  &trans  &trans  &kp ESC  &trans                  &trans  &kp TAB  &trans  &trans  &trans
+    &kp CARET &kp AMPS  AS(GRAVE)  &kp ESC  &trans           &trans  &kp TAB  &kp C_VOL_DN &kp C_VOL_UP  &kp C_PP
 
                              &trans  &trans                  &trans  &trans
         >;
