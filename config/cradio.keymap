@@ -362,7 +362,7 @@ compatible = "zmk,keymap";
 
                 sym_layer {
         bindings = <
-    &kp EXCL  &kp AT  &kp HASH  &kp DLLR  &kp PCNT           &trans  &trans  &trans  &trans  &trans
+    &kp EXCL  &kp AT  &kp HASH  &kp DLLR  &kp PRCNT           &trans  &trans  &trans  &trans  &trans
 
     &kp SLASH  &kp ASTRK  &kp MINUS  &kp PLUS  &trans        &trans  HRMR
 
