@@ -186,7 +186,7 @@ continue-list = <UNDERSCORE BSPC MINUS>;
           combo_quote {
             timeout-ms = <50>;
             key-positions = <17 18>;
-            bindings = <&mt LGUI SQT>;
+            bindings = <AS(SQT)>;
             RIGHT_EXCLUSION
         };
 
