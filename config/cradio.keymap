@@ -146,6 +146,13 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             LEFT_EXCLUSION
         };
 
+         combo_esc {
+            timeout-ms = <30>;
+            key-positions = <21 22>;
+            bindings = <&kp ESC>;
+            LEFT_EXCLUSION
+        };
+
          combo_backslash {
             timeout-ms = <50>;
             key-positions = <7 8>;
@@ -176,17 +183,24 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             bindings = <&kp PLUS>;
         };
 
-          combo_quote_mod {
+          combo_quote {
             timeout-ms = <50>;
             key-positions = <17 18>;
             bindings = <&mt LGUI SQT>;
             RIGHT_EXCLUSION
         };
 
-          combo_double_quote {
+          // commented in favor of having a more accessible tab combo
+        //   combo_double_quote {
+        //     timeout-ms = <50>;
+        //     key-positions = <27 28>;
+        //     bindings = <&kp DOUBLE_QUOTES>;
+        // };
+
+          combo_tab {
             timeout-ms = <50>;
             key-positions = <27 28>;
-            bindings = <&kp DOUBLE_QUOTES>;
+            bindings = <&kp TAB>;
         };
 
           combo_reset {
