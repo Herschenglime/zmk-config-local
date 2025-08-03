@@ -154,11 +154,6 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             LEFT_EXCLUSION
         };
 
-         combo_double_quote {
-            timeout-ms = <50>;
-            key-positions = <7 8>;
-            bindings = <&kp DOUBLE_QUOTES>;
-        };
 
          combo_hyphen {
             timeout-ms = <50>;
@@ -184,12 +179,20 @@ continue-list = <UNDERSCORE BSPC MINUS>;
             bindings = <&kp PLUS>;
         };
 
-          combo_quote {
+         combo_quote {
+            timeout-ms = <50>;
+            key-positions = <7 8>;
+            bindings = <AS(SQT)>;
+        };
+
+         // used a lot more often so moved to home row
+          combo_double_quote {
             timeout-ms = <50>;
             key-positions = <17 18>;
-            bindings = <AS(SQT)>;
+            bindings = <&kp DOUBLE_QUOTES>;
             RIGHT_EXCLUSION
         };
+
 
           // commented in favor of having a more accessible tab combo
         //   combo_double_quote {
