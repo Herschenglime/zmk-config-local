@@ -4,3 +4,6 @@
 /zmk
 /build
 .direnv/
+
+result
+.vscode

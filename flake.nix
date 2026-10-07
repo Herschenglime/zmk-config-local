@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     zmk-nix = {
       url = "github:lilyinstarlight/zmk-nix";
@@ -22,11 +22,15 @@
         board = "nice_nano_v2";
         shield = "cradio_%PART%";
 
-        zephyrDepsHash = "sha256-HGdzSpppZuZ2KzBAzGrNImNLf1aUPqlJtEID6yO06Wk=";
-
         enableZmkStudio = true;
 
-        extraCmakeFlags= ["-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"];
+        # ZMK v0.3's nanopb module imports pkg_resources, which setuptools >= 81 no longer provides
+        nativeBuildInputs = [ nixpkgs.legacyPackages.${system}.python3Packages.setuptools_80 ];
+
+        zephyrDepsHash = "sha256-F03oJNHWmHlpFc1JHyvqX02WL+Pg6ZcNWpCaiDfJANA=";
+
+        extraCmakeFlags = ["-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"];
+
         meta = {
           description = "ZMK firmware";
           license = nixpkgs.lib.licenses.mit;

@@ -2,15 +2,18 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1733212471,
-        "narHash": "sha256-M1+uCoV5igihRfcUKrr1riygbe73/dzNnzPsmaLCmpo=",
-        "path": "/nix/store/vqhkmj60457j8nrw9vb94ln40rkic1p6-source",
-        "rev": "55d15ad12a74eb7d4646254e13638ad0c4128776",
-        "type": "path"
+        "lastModified": 1791336361,
+        "narHash": "sha256-o9ZUW4SlEAvFPIyJWnqChhOT/VHpHg8TAvEgmqK1fSI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7dd199b0e2993e37b4775ed66b1c291699608c9f",
+        "type": "github"
       },
       "original": {
-        "id": "nixpkgs-unstable",
-        "type": "indirect"
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "root": {
@@ -26,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1733618330,
-        "narHash": "sha256-lC6xmEq8bDNehHeJDnuW4E1/UUjaOYRV56VxYPrD7Lo=",
+        "lastModified": 1791077757,
+        "narHash": "sha256-Melgcjtm2T74GT7UgCRHlmdJgvwtQAgeRJ1jCAIq3FI=",
         "owner": "lilyinstarlight",
         "repo": "zmk-nix",
-        "rev": "ca1be938a79673641a2e6ef9a9289cc8c320dc79",
+        "rev": "eb46e0255e78f9efdd4e18ac846a11852c100e0e",
         "type": "github"
       },
       "original": {

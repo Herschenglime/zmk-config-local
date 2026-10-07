@@ -10,18 +10,17 @@ A ZMK firmware config for a 34-key split keyboard (Cradio/Sweep layout, `nice_na
 
 ```bash
 nix build              # build firmware (left + right halves) into ./result
-nix flake check        # what CI runs (plus nix build)
+nix flake check        # evaluate and check the flake
 nix run .#flash        # flash the built firmware
-nix run .#update       # update west deps / zephyrDepsHash helper
 ```
 
 `.envrc` uses `use flake`, so direnv gives a dev shell with the ZMK toolchain. There are no tests or linters.
 
-When `config/west.yml` changes (or ZMK upstream moves), `zephyrDepsHash` in `flake.nix` goes stale and CI breaks. Run `nix run .#update`, or build and copy the expected hash from the error, then update `flake.nix`. Recent history shows this happening.
+Versions are pinned: `config/west.yml` pins ZMK v0.3 and Zephyr 3.5 by commit hash, and `flake.lock` pins nixpkgs and zmk-nix. After editing `west.yml`, set `zephyrDepsHash` in `flake.nix` to `""`, build, and copy the hash from the error. Do not run `nix run .#update`: it would move the ZMK pin to the branch head. The `.github/` workflows are not enabled; builds are local only. `flake.nix` has a `setuptools_80` build input because ZMK v0.3's Studio code needs `pkg_resources`. ZMK v0.4 (Zephyr 4.1) renames boards (`nice_nano_v2` → `nice_nano@2.0.0//zmk`), so check zmk-nix's template before upgrading.
 
 ## Architecture
 
-All keyboard logic lives in `config/cradio.keymap`, with Kconfig options in `config/cradio.conf` (sleep, BLE TX power, ZMK Studio, split battery proxy). `config/west.yml` pulls ZMK `main`. `flake.nix` filters sources by suffix, so new config files need a suffix in that list.
+All keyboard logic lives in `config/cradio.keymap`, with Kconfig options in `config/cradio.conf` (sleep, BLE TX power, ZMK Studio, split battery proxy). `config/west.yml` pulls pinned ZMK v0.3. `flake.nix` filters sources by suffix, so new config files need a suffix in that list.
 
 Key structure in `cradio.keymap`:
 - **Layers** (`#define`d indices at the top): DEFAULT, GAMING, NAV, SYM, NUM, BLUETOOTH. NUM is not reached directly. A `conditional_layers` tri-layer activates it when NAV and SYM are both held. BLUETOOTH and GAMING are toggled by combos.
