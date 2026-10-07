@@ -39,6 +39,30 @@ This builds the firmware first, so a separate `nix build` isn't needed. For each
 3. Copy that half's `.uf2` onto it. The board reboots on its own once the copy finishes.
 4. Wait for you to unplug it before moving on.
 
+## Resetting and bootloader mode
+
+Combos are described by key position, since the keys have no legends. `·` is any other key; each half's top row runs from the outer edge (pinky) to the inner edge (index).
+
+```
+  left half     right half
+  · R R B B  |  B B R R ·     R = reset combo, B = bootloader combo
+  · · · · ·  |  · · · · ·
+  · · · · ·  |  · · · · ·
+```
+
+- **Reboot a half:** press the four `R` keys together on the default layer: the second and third keys from the outer edge on each half's top row (`&sys_reset`).
+- **Enter the bootloader from the keyboard:** press the four `B` keys together on the default layer: the two innermost top-row keys on each half (`&bootloader`). The NUM layer (hold both outermost thumb keys) also has a `Boot` key: the innermost key of the left half's bottom row. The half then shows up as the `nRF UF2` drive, ready for flashing.
+- **If the keyboard isn't responding:** on the nice!nano, short the `RST` and `GND` pins together twice in quick succession (a double tap). One short is just a reset. Two quick ones enter the bootloader.
+- **Bluetooth trouble:** press the whole outer column of the left half (top, home and bottom keys) together to toggle the Bluetooth layer. Then pick a profile or clear the current one, and re-pair the host:
+
+```
+  T · · · ·  |  · · · · ·     T = Bluetooth layer toggle (press all three)
+  T · · · ·  |  · 0 1 2 3     0-3 = Bluetooth profiles 0-3
+  T · · · ·  |  · 4 C S ·     4 = profile 4, C = clear current profile, S = Studio unlock
+```
+
+Each half is reset or put in the bootloader separately, so do it on the half you're working on.
+
 ## Pinned versions
 
 Everything is pinned so the build stays reproducible until you choose to move it:
