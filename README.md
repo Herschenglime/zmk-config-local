@@ -41,7 +41,7 @@ This builds the firmware first, so a separate `nix build` isn't needed. For each
 
 ## Resetting and bootloader mode
 
-Combos are described by key position, since the keys have no legends. `·` is any other key; each half's top row runs from the outer edge (pinky) to the inner edge (index).
+Combos are described by key position, since the keys have no legends. The diagram at the top shows every combo as a small keyboard with the keys to press highlighted. `·` is any other key; each half's top row runs from the outer edge (pinky) to the inner edge (index).
 
 ```
   left half     right half

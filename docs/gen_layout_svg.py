@@ -100,16 +100,36 @@ PANELS = [
     ("BLUETOOTH", "toggle: Q + A + Z", BLUETOOTH),
 ]
 
+# (what it does, extra note, key positions as numbered in config/cradio.keymap)
 COMBOS = [
-    ("Del", "W F"), ("Bksp*", "R S"), ("Esc*", "X C"), ("Tab", ", ."),
-    ("Gui*", "R S T"), ("RAlt", "X C D / H , ."), ('"', "U Y"), ("'†", "E I"),
-    ("− (hold _)", "T G"), ("_", "D V"), ("= (hold +)", "M N"), ("+", "K H"),
-    ("{", "F P"), ("}", "L U"), ("(*", "S T"), (")†", "N E"),
-    ("[", "C D"), ("]", "H ,"), ("Caps word", "inner thumbs"),
-    ("Alt-Tab/Ctrl", "left thumbs"), ("Gui-Tab/Alt", "right thumbs"),
-    ("Gui^Ret", "all 4 thumbs"), ("Terminal", "N E I"),
-    ("Gaming", "F R T"), ("Bluetooth", "Q A Z"),
-    ("Reset", "W F U Y"), ("Bootloader", "P B J L"),
+    ("Del", "", [1, 2]),
+    ("Backspace", "not on NAV", [11, 12]),
+    ("Esc", "not on NAV", [21, 22]),
+    ("Tab", "", [27, 28]),
+    ("Gui", "not on NAV", [11, 12, 13]),
+    ("Right Alt", "left side", [21, 22, 23]),
+    ("Right Alt", "right side", [26, 27, 28]),
+    ('" (double quote)', "", [7, 8]),
+    ("' (quote)", "not on SYM", [17, 18]),
+    ("-", "hold for _", [13, 14]),
+    ("_", "", [23, 24]),
+    ("=", "hold for +", [15, 16]),
+    ("+", "", [25, 26]),
+    ("{", "", [2, 3]),
+    ("}", "", [6, 7]),
+    ("(", "not on NAV", [12, 13]),
+    (")", "not on SYM", [16, 17]),
+    ("[", "", [22, 23]),
+    ("]", "", [26, 27]),
+    ("Caps word", "", [31, 32]),
+    ("Alt-Tab / hold Ctrl", "", [30, 31]),
+    ("Gui-Tab / hold Alt", "", [32, 33]),
+    ("Gui+Ctrl+Enter", "", [30, 31, 32, 33]),
+    ("Terminal", "Gui+Alt+T", [16, 17, 18]),
+    ("Gaming layer", "toggle", [2, 11, 13]),
+    ("Bluetooth layer", "toggle", [0, 10, 20]),
+    ("Reboot half", "reset", [1, 2, 7, 8]),
+    ("Bootloader", "UF2 flash mode", [3, 4, 5, 6]),
 ]
 
 
@@ -146,14 +166,35 @@ def panel_svg(ox, oy, title, subtitle, keys):
     return "".join(out)
 
 
+MK, MG, MHALF = 11, 2, 10  # mini key size, gap, gap between halves
+MSTEP = MK + MG
+MINI_W = 10 * MSTEP + MHALF - MG
+MINI_H = 4 * MSTEP - MG
+
+
+def mini_svg(ox, oy, lit):
+    out = []
+    for i in range(34):
+        if i < 30:
+            row, col = divmod(i, 10)
+        else:
+            row, col = 3, [3, 4, 5, 6][i - 30]
+        x = ox + col * MSTEP + (MHALF - MG if col >= 5 else 0)
+        y = oy + row * MSTEP
+        fill, stroke = ("#2563eb", "#1e3a8a") if i in lit else ("#ffffff", "#c4cad4")
+        out.append(f'<rect x="{x}" y="{y}" width="{MK}" height="{MK}" rx="2.5" fill="{fill}" stroke="{stroke}"/>')
+    return "".join(out)
+
+
 def main():
     cols = 2
     rows = (len(PANELS) + 1) // 2
     width = MARGIN * 2 + cols * PANEL_W + (cols - 1) * 40
     panels_h = rows * (PANEL_H + 12)
-    combo_cols = 3
+    combo_cols = 6
     combo_rows = -(-len(COMBOS) // combo_cols)
-    height = MARGIN * 2 + 30 + panels_h + 40 + combo_rows * 20 + 30
+    CELL_H = 110
+    height = MARGIN * 2 + 30 + panels_h + 40 + combo_rows * CELL_H + 10
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" '
         f'font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">',
@@ -167,14 +208,16 @@ def main():
     cy = y0 + panels_h + 24
     parts.append(f'<text x="{MARGIN}" y="{cy}" font-size="15" font-weight="700" fill="#111827">COMBOS</text>')
     parts.append(f'<text x="{MARGIN + 90}" y="{cy}" font-size="11" fill="#6b7280">'
-                 f'press the keys on the DEFAULT layer together · * not on NAV · † not on SYM</text>')
+                 f'press the highlighted keys together · all combos work on every layer unless noted</text>')
     colw = (width - 2 * MARGIN) / combo_cols
-    for i, (name, keys) in enumerate(COMBOS):
-        c, r = divmod(i, combo_rows)
-        x, y = MARGIN + c * colw, cy + 24 + r * 20
-        parts.append(f'<text x="{x}" y="{y}" font-size="12" font-weight="600" fill="#1f2937">{esc(name)}</text>')
-        parts.append(f'<text x="{x + 130}" y="{y}" font-size="12" fill="#6b7280" '
-                     f'font-family="ui-monospace, Menlo, Consolas, monospace">{esc(keys)}</text>')
+    for i, (name, note, lit) in enumerate(COMBOS):
+        r, c = divmod(i, combo_cols)
+        x, y = MARGIN + c * colw, cy + 14 + r * CELL_H
+        parts.append(f'<rect x="{x}" y="{y}" width="{colw - 10}" height="{CELL_H - 10}" rx="8" fill="#ffffff" stroke="#e5e7eb"/>')
+        parts.append(f'<text x="{x + 10}" y="{y + 19}" font-size="12" font-weight="700" fill="#111827">{esc(name)}</text>')
+        if note:
+            parts.append(f'<text x="{x + 10}" y="{y + 33}" font-size="10" fill="#6b7280">{esc(note)}</text>')
+        parts.append(mini_svg(x + (colw - 10 - MINI_W) / 2, y + 40, lit))
     parts.append("</svg>")
     out = Path(__file__).with_name("layout.svg")
     out.write_text("\n".join(parts), encoding="utf-8")
