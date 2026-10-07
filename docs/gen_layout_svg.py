@@ -71,7 +71,7 @@ SYM = (
 )
 
 NUM = (
-    plain("F1 F2 F3 F4") + [K("Ins")] + [K("Del"), K("7"), K("8"), K("9"), T]
+    plain("F1 F2 F3 F4") + [K("Ins")] + [K("Del"), K("7"), K("8"), K("9"), K(";", ":")]
     + plain("F5 F6 F7 F8") + [K("PrtSc")] + [K("Bksp"), K("4"), K("5"), K("6"), K("0")]
     + plain("F9 F10 F11 F12") + [K("Boot", None, "sys")] + [K(","), K("1"), K("2"), K("3"), K(".")]
     + [T] * 4
